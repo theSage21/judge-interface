@@ -9,5 +9,5 @@ urlpatterns = patterns('',
                        url(r'^question/', include('question.urls', namespace='question')),
                        url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name='login'),
                        url(r'^logout/$', 'django.contrib.auth.views.logout',
-                           {'template_name': 'logout.html'}, name='logout'),
+                           {'template_name': 'logged_out.html'}, name='logout'),
                        ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

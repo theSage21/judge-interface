@@ -10,14 +10,17 @@
     <!-- Stylesheets -->
     {%load staticfiles%}
     {%load bootstrap%}
-    <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified CSS 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-    <!--Jquery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    -->
+    <link rel="stylesheet" href={% static 'bootstrap.min.css' %}>
+    <link rel="stylesheet" href={% static 'bootstrap-theme.min.css' %}>
+    <script src={% static 'jquery.min.js' %}></script>
+    <script src={% static 'bootstrap.min.js' %}></script>
+
     </head>
 
 
@@ -36,7 +39,8 @@
                 <li><a href={%url 'question:home' %}> <span class='glyphicon glyphicon-home'></span> Home</a></li>
                 <li><a href={%url 'question:leaderboard'%}><span class="glyphicon glyphicon-registration-mark"></span> Leaderboard</a></li>
                 {% if request.user.is_authenticated %}
-                <li> {{user.profile}} <a href={% url 'login' %}>Logout</a>
+                <li><a> {{user.profile}}</a> </li>
+                <li><a href={% url 'logout' %}>Logout</a>
                 {% else %}
                 <li>
                     <a href={%url "login"%}>Login</a>

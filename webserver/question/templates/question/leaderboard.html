@@ -2,14 +2,8 @@
 {%block title%}LeaderBoard{%endblock%}
 
 {%block body%}
-<ul class='list-inline'>
-    {%for q in questions%}  
-        <li>{{q.qno}}|{{q.get_score}}</li>
-    {%endfor%}
-</ul>
-<hr>
 <div class='table-responsive'>
-    <table class='table table-hover'>
+    <table class='table table-hover table-striped'>
         <thead><tr>
             <th>Rank</th>
             <th>Player</th>
