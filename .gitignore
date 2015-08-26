@@ -56,6 +56,6 @@ docs/_build/
 target/
 
 # openJudge
-check_data/
+wrappers/
 static_files/
 joblist*

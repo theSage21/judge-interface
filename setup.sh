@@ -7,8 +7,8 @@ if source ./env/bin/activate; then
 else
     virtualenv -p python3 env
     source env/bin/activate
-    pip install -r requirements.txt
 fi
+pip install -r requirements.txt
 
 setup_folder=$PWD
 mkdir wrappers
@@ -65,7 +65,7 @@ at.name='Exact'
 at.save()
 
 print('Adding wrappers')
-path = os.path.join(os.path.split(os.getcwd())[0], 'check_data', 'wrappers')
+path = os.path.join(os.path.split(os.getcwd())[0], 'wrappers')
 wrappers = os.listdir(path)
 for wr in wrappers:
     if 'input.py' == wr:
