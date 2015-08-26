@@ -9,7 +9,7 @@ def leaderboard(request):
     """The scoreboard"""
     data = {}
     template = 'question/leaderboard.html'
-    data['players'] = models.Profile.objects.order_by('score')
+    data['players'] = models.Profile.objects.order_by('-score')
     data['questions'] = models.Question.objects.order_by('qno')
     return render(request, template, data)
 

@@ -1,3 +1,5 @@
 #! /bin/bash
-gcc $2
-./a.out < $1
+name=$RANDOM
+gcc $2 -o /tmp/$name
+/tmp/$name < $1
+rm /tmp/$name
