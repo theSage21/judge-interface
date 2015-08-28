@@ -11,6 +11,7 @@ fi
 pip install -r requirements.txt
 
 setup_folder=$PWD
+echo $setup_folder
 mkdir wrappers
 cp wrappers_origional/* wrappers/
 # add absolute path to the wrappers
@@ -113,11 +114,11 @@ sudo service nginx start
 
 echo "
 upstream app_server_djangoapp {
-    server unix:$setup_folder/gunicorn_socket fail_timeout=0;
+    server 127.0.0.1:8000 fail_timeout=0;
 }
 server {
     listen 0.0.0.0:80;
-    server_name  .example.com;
+    server_name  .openjudge.com;
  
     keepalive_timeout 5;
     # path for static files
@@ -135,6 +136,7 @@ echo '    location / {
 sudo mv $setup_folder/judge.conf /etc/nginx/sites-available/openjudge
 
 cd /etc/nginx/sites-enabled/
+sudo rm /etc/nginx/sites-enabled/openjudge
 sudo ln /etc/nginx/sites-available/openjudge
 sudo service nginx reload
 
