@@ -122,8 +122,14 @@ server {
  
     keepalive_timeout 5;
     # path for static files
-    root $setup_folder/webserver/static_files/;" > $setup_folder/judge.conf
-echo '    location / {
+    root $setup_folder/webserver/static_files/;
+    location /static {
+            alias $setup_folder/webserver/static_files/;" > $setup_folder/judge.conf
+echo '
+            access_log   off;
+            expires      max;
+             }
+    location / {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header Host $http_host;
         proxy_redirect off;
