@@ -20,7 +20,6 @@ echo -e "$RED Webserver Setup started.$NC"
 # WEBSERVER SETUP
 cd webserver
 rm db.sqlite3 
-rm -rf staticfiles
 rm -rf static_files
 
 python manage.py makemigrations
