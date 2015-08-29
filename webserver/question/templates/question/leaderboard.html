@@ -16,10 +16,18 @@
                     <td>{{forloop.counter}}</td>
                     <td>{{p}}</td>
                     <td>{{p.score}}</td>
-                    <td>{{p.last_solved}}</td>
+                    <td>{{p.last_solved|timesince}}</td>
                 </tr>
             {%endfor%}
         </tbody>
     </table>
 </div>
+<script type="text/JavaScript">
+<!--
+function timedRefresh(timeoutPeriod) {
+    setTimeout("location.reload(true);",timeoutPeriod);
+}
+timedRefresh(60000);
+//   -->
+</script>
 {%endblock%}

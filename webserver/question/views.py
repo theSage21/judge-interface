@@ -29,7 +29,7 @@ def question(request, qno):
     data = {}
     template = 'question/question.html'
     data['question'] = get_object_or_404(models.Question, qno=qno)
-    data['attempts'] = models.Attempt.objects.filter(question=data['question'], player=request.user.profile)
+    data['attempts'] = models.Attempt.objects.filter(question=data['question'], player=request.user.profile).order_by('-stamp')
     if request.method == 'GET':
         data['answer_form'] = models.AttemptForm()
     if request.method == 'POST':

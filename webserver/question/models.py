@@ -41,7 +41,7 @@ class Attempt(models.Model):
 
     def get_json__(self):
         """
-        Return essential data as json string
+        Return essential data as dict
         """
         data = {'pk': self.pk,
                 'qno': self.question.pk,
