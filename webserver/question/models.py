@@ -32,7 +32,8 @@ class Attempt(models.Model):
     player = models.ForeignKey('Profile', related_name='player')
     question = models.ForeignKey('Question', related_name='question')
     language = models.ForeignKey('Language', related_name='language')
-    source = models.FileField(upload_to='source')
+    source = models.TextField(null=True)
+    source_name = models.CharField(max_length=30, help_text='Name of source code file', null=True)
     correct = models.NullBooleanField(default=None)
     stamp = models.DateTimeField(auto_now_add=True)
     marks = models.FloatField()
@@ -44,7 +45,8 @@ class Attempt(models.Model):
         """
         data = {'pk': self.pk,
                 'qno': self.question.pk,
-                'source': self.source.url,
+                'source': self.source,
+                'name': self.source_name,
                 'language': self.language.pk,
                 }
         return data
