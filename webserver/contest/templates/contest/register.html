@@ -5,6 +5,9 @@
 {% endblock %}
 
 {%block body%}
+{% if successful_registration %}
+    <b>{{successful_registration}}</b> was registered.<br>
+{% endif %}
 <div class='col-md-4 text-center'>
     <form role='form' method="post" action="{% url 'register' %}" class='form'>
         {% csrf_token %}

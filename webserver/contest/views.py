@@ -22,6 +22,7 @@ def register(request):
             p.username = uname
             p.set_password(pwd)
             p.save()
+            context['successful_registration'] = uname
         else:
             context['form'] = form
     return render(request, template, context)
