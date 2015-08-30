@@ -37,20 +37,21 @@
         </div><!--navbar-header-->
         <div class='collapse navbar-collapse' id='navbar-collapse-1'>
             <ul class='nav navbar-nav'>
-                <li><a href={%url 'question:home' %}><span class='glyphicon glyphicon-home'></span> Home</a></li>
+                <li><a href={% url 'home' %}>Home</a></li>
+                <li><a href={% url 'question:home' %}>Questions</a></li>
                 <li><a href={% url 'register' %}>Register</a></li>
-                <li><a href={%url 'question:leaderboard'%}><span class="glyphicon glyphicon-registration-mark"></span> Leaderboard</a></li>
+                <li><a href={% url 'question:leaderboard'%}>Leaderboard</a></li>
                 {% if request.user.is_authenticated %}
                 <li><a> {{user.profile}}</a> </li>
                 <li><a href={% url 'logout' %}>Logout</a>
                 {% else %}
                 <li>
-                    <a href={%url "login"%}>Login</a>
+                    <a href={% url "login"%}>Login</a>
                 {% endif %}
                 </li>
             </ul>
             <ul class='nav navbar-right'>
-                <li>Server time at page load: {%now "jS F Y H:i"%}</li>
+                <li>Server time at page load: {% now "jS F Y H:i"%}</li>
             </ul>
         </div><!-- Navbar collapse-->
         </nav>
