@@ -20,7 +20,8 @@
     <link rel="stylesheet" href={% static 'bootstrap-theme.min.css' %}>
     <script src={% static 'jquery.min.js' %}></script>
     <script src={% static 'bootstrap.min.js' %}></script>
-
+    {% block styles %}
+    {% endblock %}
     </head>
 
 
@@ -36,7 +37,8 @@
         </div><!--navbar-header-->
         <div class='collapse navbar-collapse' id='navbar-collapse-1'>
             <ul class='nav navbar-nav'>
-                <li><a href={%url 'question:home' %}> <span class='glyphicon glyphicon-home'></span> Home</a></li>
+                <li><a href={%url 'question:home' %}><span class='glyphicon glyphicon-home'></span> Home</a></li>
+                <li><a href={% url 'register' %}>Register</a></li>
                 <li><a href={%url 'question:leaderboard'%}><span class="glyphicon glyphicon-registration-mark"></span> Leaderboard</a></li>
                 {% if request.user.is_authenticated %}
                 <li><a> {{user.profile}}</a> </li>

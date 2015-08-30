@@ -13,6 +13,10 @@ class Profile(User):
     score = models.FloatField(default=0.0)
     last_solved = models.DateTimeField(default=now)
 
+    def save(self, *args, **kwargs):
+        pwd = self.password
+        self.set_password(pwd)
+        super(Profile, self).save(*args, **kwargs) # Call the "real" save() method.
 
 class Language(models.Model):
     """A programming language which is available on the check server.

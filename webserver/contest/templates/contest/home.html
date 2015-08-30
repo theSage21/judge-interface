@@ -1,6 +1,23 @@
 {%extends 'base.html'%}
 {%block body%}
 <div class='lead'>
-Welcome to the programming contest.
+<h1 class='bg-warning'>openjudge <h1>
+<hr>
+<h4 class='bg-info'>Scoring</h4>
+    <ul>
+        <li>Each question has a score associated with it.</li>
+        <li>The score is calculated as (Wrong attempts)/(Total Attempts) on the question</li>
+        <li>For the first attempt it is 1.0</li>
+        <li>Thus the score at each attempt is recalculated per attempt. No ties</li>
+    </ul>
+
+<hr>
+<h4 class='bg-info'>Participating</h4>
+    <ul>
+        <li><a href={% url 'register' %}>Register</a></li>
+        <li>Login</li>
+        <li>Home</li>
+    </ul>
+
 </div>
 {%endblock%}
