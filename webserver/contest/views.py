@@ -20,7 +20,7 @@ def register(request):
             pwd = form['password'].value()
             p = Profile()
             p.username = uname
-            p.password = pwd
+            p.set_password(pwd)
             p.save()
         else:
             context['form'] = form

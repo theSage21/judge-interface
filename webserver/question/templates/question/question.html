@@ -22,10 +22,11 @@
             {% endfor %}
             </ol>
         {% elif question %}
-            <h3>{{question.qno}}</h3><h4>{{question.title}}</h4>
+            <p class='lead'>{{question.qno}}: {{question.title}}</p>
+            <p class='bg-warning'>Marks on page load: {{marks}}</p>
             <pre>{{question.text}}</pre>
             <hr>
-            <form role='form' action={%url "question:question" question.qno %} method='post' enctype="multipart/form-data">
+            <form role='form' action={%url "question:question" question.qno %} method='post'>
             {%csrf_token%}
             {%load bootstrap%}
             {{answer_form|bootstrap}}

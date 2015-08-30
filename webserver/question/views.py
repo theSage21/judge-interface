@@ -29,21 +29,26 @@ def question(request, qno):
     data = {}
     template = 'question/question.html'
     data['question'] = get_object_or_404(models.Question, qno=qno)
-    data['attempts'] = models.Attempt.objects.filter(question=data['question'], player=request.user.profile).order_by('-stamp')
+    data['marks'] = functions.get_marks(data['question'])
+    data['attempts'] = models.Attempt.objects.filter(question=data['question'],
+                                                     player=request.user.profile).order_by('-stamp')
+
     if request.method == 'GET':
         data['answer_form'] = models.AttemptForm()
+
     if request.method == 'POST':
         data['answer_form'] = models.AttemptForm(request.POST, request.FILES)
         if data['answer_form'].is_valid():
             form = data['answer_form']
-            form = form.save(commit=False)
-            form.player = request.user.profile
-            form.question = data['question']
-            form.marks = functions.get_marks(data['question'])
-            form.save()
-            if functions.is_correct(form):  # force a check request
-                functions.update_marks(request.user.profile, form)
+            attempt = form.save(commit=False)
+            attempt.player = request.user.profile
+            attempt.question = data['question']
+            attempt.marks = data['marks']
+            attempt.save()
+            if functions.is_correct(attempt):  # force a check request
+                functions.update_marks(request.user.profile, attempt)
             return redirect('question:question', qno=qno)
+
     return render(request, template, data)
 
 

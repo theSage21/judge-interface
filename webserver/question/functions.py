@@ -76,10 +76,10 @@ def get_marks(question):
 
 def update_marks(profile, attempt):
     correct_attempts = Attempt.objects.filter(player=profile,
-                                              question=attempt.question,
-                                              correct=True,
-                                              ).exclude(pk=attempt.pk).count()
-    if correct_attempts < 1:  # this has never been correctly attempted
+                                              question=attempt.question
+                                              ).filter(correct=True,
+                                                       ).exclude(pk=attempt.pk).count()
+    if correct_attempts < 1:  # this has never been correctly attempted by player
         if attempt.correct:
             profile.score += attempt.marks
             profile.save()
