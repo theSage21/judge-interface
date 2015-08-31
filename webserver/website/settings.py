@@ -91,13 +91,13 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = None
 
-USE_I18N = True
+USE_I18N = False
 
-USE_L10N = True
+USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -109,10 +109,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_files')
 MEDIA_ROOT = os.path.join(STATIC_ROOT, 'media_files')
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
-STATICFILES_FINDERS = (
-'django.contrib.staticfiles.finders.FileSystemFinder',
-'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-)
+STATICFILES_FINDERS = ('django.contrib.staticfiles.finders.FileSystemFinder',
+                       'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+                       )
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
