@@ -37,7 +37,7 @@
         <div class='table-responsive'>
             <table class='table table-hover'>
                 <thead><tr>
-                    <th>Language</th>
+                    <th>Attempt Details</th>
                     <th>Time-Stamp</th>
                     <th>Marks</th>
                     <th>Remarks</th>
@@ -45,7 +45,7 @@
                 <tbody>
                     {%for a in attempts%}
                         <tr>
-                            <td>{{a.language}}</td>
+                            <td><a href={{a.get_absolute_url}}> See attempt no {{a.pk}}</a></td>
                             <td>{{a.stamp}}</td>
                             <td>{{a.marks}}</td>
                             <td><pre>{{a.remarks}}</pre></td>

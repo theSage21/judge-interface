@@ -39,6 +39,10 @@ class Attempt(models.Model):
     marks = models.FloatField()
     remarks = models.TextField()  # Remarks from the check server go there
 
+    def get_absolute_url(self):
+        "Get the absolute url of the attempt"
+        return reverse('question:attempt', kwargs={'att': self.pk})
+
     def get_json__(self):
         """
         Return essential data as dict

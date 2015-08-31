@@ -67,6 +67,15 @@ def question_details(request, qno):
     return JsonResponse(data)
 
 
+def attempt(request, att):
+    data, att = {}, int(att)
+    template = 'question/attempt.html'
+    # -----
+    attempt = get_object_or_404(models.Attempt, pk=att)
+    data['attempt'] = attempt
+    return render(request, template, data)
+
+
 def language_details(request, lno):
     """
     Language details to be use by the Check server

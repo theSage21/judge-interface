@@ -1,0 +1,36 @@
+{%extends 'base.html'%}
+{%block title%}Attempt {{attempt.pk}}{%endblock%}
+
+{%block body%}
+    <div class='container text-left'>
+        <p class='lead'>{{attempt.pk}}</p>
+        <div class='table-responsive'>
+            <table class='table table-hover'>
+                <thead><tr>
+                    <th>Language</th>
+                    <th>Source Name</th>
+                    <th>Marks</th>
+                    <th>Question</th>
+                    <th>Time-Stamp</th>
+                    <th>Is Correct</th>
+                </tr></thead>
+                <tbody>
+                        <tr>
+                            <td>{{attempt.language}}</td>
+                            <td>{{attempt.source_name}}</td>
+                            <td>{{attempt.marks}}</td>
+                            <td>{{attempt.question}}</td>
+                            <td>{{attempt.stamp}}</td>
+                            <td>{{attempt.correct}}</td>
+                        </tr>
+                </tbody>
+            </table>
+            <hr>
+            <h3>Source Code</h3>
+            <pre>{{attempt.source}}</pre>
+            <h3>Remarks</h3>
+            <pre>{{attempt.remarks}}</pre>
+        </div>
+        </div>
+    </div>
+{%endblock%}
