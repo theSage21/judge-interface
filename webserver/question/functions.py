@@ -27,11 +27,11 @@ def ask_check_server(data,
             }
     """
     slaves = get_alive_slaves()
-    while True:
-        if (data['pk'] not in job_assignment.keys()) or\
-           not job_assignment[data['pk']].is_alive():  # assigned slave has died
-            job_assignment[data['pk']] = choice(slaves)
-        address = job_assignment[data['pk']].get_address()
+
+    if (data['pk'] not in job_assignment.keys()) or\
+       (not job_assignment[data['pk']].is_alive()):  # assigned slave has died
+        job_assignment[data['pk']] = choice(slaves)
+    address = job_assignment[data['pk']].get_address()
 
     try:
         sock = create_connection(address)

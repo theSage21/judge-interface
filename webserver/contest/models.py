@@ -16,7 +16,7 @@ class Slave(models.Model):
         except:
             return False
         else:
-            con.sendall('Alive')
+            con.sendall('Alive'.encode('utf-8'))
             if con.recv(512).decode() == 'True':
                 return True
             else:
