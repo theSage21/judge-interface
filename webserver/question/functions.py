@@ -1,7 +1,6 @@
 from socket import create_connection
 from contest.models import Slave
 from json import loads, dumps
-from random import choice
 from question.models import Attempt
 
 
@@ -11,9 +10,34 @@ def get_alive_slaves():
     return alive
 
 
-def ask_check_server(data,
-                     job_assignment={},  # for keeping track of jobs
-                     ):
+def assign_job(data, jobs={}):
+    """
+    Assign the job to some slave in the available list.
+    """
+    pk = data['pk']
+    is_assigned = pk in jobs.keys()
+    assignment_needed = False
+    if is_assigned:
+        slave = jobs[pk]
+        if not slave.is_alive():
+            assignment_needed = True
+    else:
+        assignment_needed = True
+
+    if assignment_needed:
+        slaves = get_alive_slaves()
+        # if slaves: what if there are no slaves?
+        assigned = False
+        while not assigned:  # assign to first non busy slave
+            for slave in slaves:
+                if not slave.busy:
+                    jobs[pk] = slave
+                    assigned = True
+        address = jobs[pk].get_address()
+    return jobs[pk], address
+
+
+def ask_check_server(data):
     """
     Ask the check server is the current attempt done?
     Returns None/True/False and comments.
@@ -26,33 +50,29 @@ def ask_check_server(data,
             'language'  :language pk,
             }
     """
-    slaves = get_alive_slaves()
+    slave, address = assign_job(data)
 
-    if (data['pk'] not in job_assignment.keys()) or\
-       (not job_assignment[data['pk']].is_alive()):  # assigned slave has died
-        job_assignment[data['pk']] = choice(slaves)
-    address = job_assignment[data['pk']].get_address()
+    with slave:
+        try:
+            sock = create_connection(address)
+        except:
+            value, remarks = None, 'Connection error'
+        else:
+            data = dumps(data)
+            sock.sendall(data.encode('utf-8'))
+            resp = sock.recv(4096)
+            resp, remarks = loads(resp.decode())
+        finally:
+            sock.close()
 
-    try:
-        sock = create_connection(address)
-    except:
-        value, remarks = None, 'Connection error'
-    else:
-        data = dumps(data)
-        sock.sendall(data.encode('utf-8'))
-
-        resp = sock.recv(4096)
-        resp, remarks = loads(resp.decode())
-        sock.close()
-
-        if resp == 'Timeout':
-            value, remarks = False, resp
-        elif resp == 'Correct':
-            value, remarks = True, resp
-        elif resp == 'Incorrect':
-            value, remarks = False, resp
-        elif resp == 'Error':
-            value, remarks = False, remarks
+    if resp == 'Timeout':
+        value, remarks = False, resp
+    elif resp == 'Correct':
+        value, remarks = True, resp
+    elif resp == 'Incorrect':
+        value, remarks = False, resp
+    elif resp == 'Error':
+        value, remarks = False, remarks
     return value, remarks
 
 

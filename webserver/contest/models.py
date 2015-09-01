@@ -8,6 +8,7 @@ class Slave(models.Model):
 
     ip = models.GenericIPAddressField()
     port = models.IntegerField()
+    busy = models.BooleanField(default=False)
 
     def is_alive(self):
         addr = (self.ip, self.port)
@@ -17,10 +18,15 @@ class Slave(models.Model):
             return False
         else:
             con.sendall('Alive'.encode('utf-8'))
-            if con.recv(512).decode() == 'True':
-                return True
-            else:
-                return False
+            return True
 
     def get_address(self):
         return (self.ip, self.port)
+
+    def __enter__(self):
+        self.busy = True
+        self.save()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.busy = False
+        self.save()
