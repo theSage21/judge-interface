@@ -51,10 +51,11 @@ cd ..
 echo "
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'website.settings')
-from question import models
-from django.core.files import File
 import django
 django.setup()
+from question import models
+from contest.models import Slave
+from django.core.files import File
 
 print('Adding answer types')
 at = models.AnswerType()
@@ -75,7 +76,12 @@ for wr in wrappers:
     ln.details = wr
     ln.wrapper = File(open(os.path.join(path, wr),'r'))
     ln.save()
-
+print('Adding slaves')
+for i in range(9000, 9011):
+    s = Slave()
+    s.ip = '127.0.0.1'
+    s.port = i
+    s.save()
 print('Adding calibration questions')
 q = models.Question()
 q.qno = 0

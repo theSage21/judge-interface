@@ -1,8 +1,14 @@
 from socket import create_connection
-from django.conf import settings
+from contest.models import Slave
 from json import loads, dumps
 from random import choice
 from question.models import Attempt
+
+
+def get_alive_slaves():
+    slaves = Slave.objects.all()
+    alive = [s for s in slaves if s.is_alive()]
+    return alive
 
 
 def ask_check_server(data,
@@ -20,9 +26,12 @@ def ask_check_server(data,
             'language'  :language pk,
             }
     """
-    if data['pk'] not in job_assignment.keys():
-        job_assignment[data['pk']] = choice(settings.SLAVE_ADDRESSES)
-    address = job_assignment[data['pk']]
+    slaves = get_alive_slaves()
+    while True:
+        if (data['pk'] not in job_assignment.keys()) or\
+           not job_assignment[data['pk']].is_alive():  # assigned slave has died
+            job_assignment[data['pk']] = choice(slaves)
+        address = job_assignment[data['pk']].get_address()
 
     try:
         sock = create_connection(address)
