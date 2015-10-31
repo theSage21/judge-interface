@@ -94,6 +94,8 @@ def is_correct(attempt):
 
 def get_marks(question):
     """Get the current score for a question"""
+    if question.practice:
+        return 0
     total_attempts = Attempt.objects.filter(question=question).exclude(correct=None).count()
     wrong_attempts = Attempt.objects.filter(question=question, correct=False).count()
     if total_attempts == 0:

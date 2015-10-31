@@ -61,6 +61,7 @@ class Question(models.Model):
     qno = models.IntegerField()
     title = models.CharField(max_length=50)
     text = models.TextField(default='Question text goes here')
+    practice = models.Booleanfield(default=False)
     # -----------
 
     def __str__(self):

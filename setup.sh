@@ -87,6 +87,7 @@ q = models.Question()
 q.qno = 0
 q.title='Square It- Calibration'
 q.text = '''This is a calibration question.\n Read 5 integers from stdin (cin, scanf, input etc).\nFor each input print it's square on a seperate line.'''
+q.practice = True
 q.save()
 
 print('Adding answers for questions')
