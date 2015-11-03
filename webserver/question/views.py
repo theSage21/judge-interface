@@ -32,8 +32,9 @@ def question(request, qno):
     data = {}
     template = 'question/question.html'
     data['contest_on'] = is_contest_on()
-    if is_contest_on():
-        data['question'] = get_object_or_404(models.Question, qno=qno)
+    ques = get_object_or_404(models.Question, qno=qno)
+    if is_contest_on() or ques.practice:
+        data['question'] = ques
         data['marks'] = functions.get_marks(data['question'])
         data['attempts'] = models.Attempt.objects.filter(question=data['question'],
                                                          player=request.user.profile).order_by('-stamp')
