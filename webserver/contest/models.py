@@ -1,5 +1,6 @@
 from socket import create_connection
 from django.db import models
+from django.utils import timezone
 
 
 class Slave(models.Model):
@@ -30,3 +31,13 @@ class Slave(models.Model):
     def __exit__(self, exc_type, exc_value, traceback):
         self.busy = False
         self.save()
+
+
+class ContestControl(models.Model):
+    "Control for the contest"
+    def __str__(self):
+        return self.name
+
+    name = models.CharField(max_length=100, default='Contest')
+    start = models.DateTimeField(default=timezone.now)
+    end = models.DateTimeField(default=timezone.now)
