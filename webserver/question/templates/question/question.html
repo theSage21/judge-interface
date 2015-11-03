@@ -13,13 +13,16 @@
 {% endblock %}
 
 {%block body%}
-<h4 class'text-center'>Contest is {% if contest_on %}LIVE{%else%}OffLine{%endif%}</h4>
     <div class='container text-left'>
         {% if questions %}
+            <div class='row'>
             <h3>Questions</h3>
-            <ol>
+            <i>Questions in green are practice questions and carry no marks.</i>
+            </div>
+
+            <ol class='col-md-5'>
             {% for ques in questions %}
-                <li><a href={{ ques.get_absolute_url }}>{{ques.title}}</a></li>
+            <li class='bg-{% if ques.practice %}success{% else %}danger{% endif %}'><a href={{ ques.get_absolute_url }}>{{ques.title}}</a></li>
             {% endfor %}
             </ol>
         {% elif question %}

@@ -48,10 +48,15 @@
                 <li>
                     <a href={% url "login"%}>Login</a>
                 {% endif %}
-                </li>
             </ul>
             <ul class='nav navbar-right'>
                 <li>Server time at page load: <b id='time'>{% now "jS F Y H:i"%}</b>&nbsp;</li>
+                <li> {% if contest_on %}
+                    <a class='text-success'>Contest Online
+                     {%else%}
+                    <a class='text-danger'>Contest OffLine
+                     {%endif%}
+                </a></li>
             </ul>
         </div><!-- Navbar collapse-->
         </nav>
