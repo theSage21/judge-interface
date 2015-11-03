@@ -1,26 +1,24 @@
 {%extends 'base.html'%}
 {%block body%}
-<div class='lead'>
+<div class='container'>
 <h1 class='bg-warning'>Programming Sprint <h1>
 <hr>
-<h4 class='bg-info'>Instructions</h4>
+<h4 class='text-left bg-info'>Instructions</h4>
     <ul>
-        <li>The navigation bar is the place for your information</li>
-        <li>Each question has a score associated with it.</li>
-        <li>Wrong attempts have no negative effect on your current score</li>
-        <li>The score is calculated as (Wrong attempts)/(Total Attempts) on the question</li>
-        <li>For the first attempt it is 1.0</li>
-        <li>Thus the score at each attempt is recalculated per attempt. No ties</li>
+        <li>The navigation bar is the place for your information (Time, contest status, links, score)</li>
+        <li>Each question has a score associated with it. When you attempt the question correctly it's score is added to your current score. There is no penalty for wrong attempts.</li>
+        <li>The score is calculated as (Wrong attempts)/(Total Attempts) on the question by everyone. hence a tough question has high score and easy one has low score. For first attempt score is 1.0</li>
         <li>You can use any language that you like. eg. python2 for Q1 and java for Q3</li>
-        <li>The practice questions will help you understand how the contest works</li>
+        <li>The practice questions will help you understand how the contest works. They have 0 marks.</li>
+        <li>Contest questions can only be seen once the contest is active. Practice questions can be seen and attempted at any time.</li>
     </ul>
 
 <hr>
 <h4 class='bg-info'>Participating</h4>
     <ul>
         <li><a href={% url 'register' %}>Register</a></li>
-        <li>Login</li>
-        <li>Home</li>
+        <li><a href={% url 'login' %}>Login</a></li>
+        <li><a href={% url 'question:home' %}>Questions</a></li>
     </ul>
 
 </div>
