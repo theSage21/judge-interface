@@ -42,7 +42,7 @@
                 <li><a href={% url 'register' %}>Register</a></li>
                 <li><a href={% url 'question:leaderboard'%}>Leaderboard</a></li>
                 {% if request.user.is_authenticated %}
-                <li><a> {{user.profile}}</a> </li>
+                <li><a> {{user.profile}} - {{user.profile.score}}</a> </li>
                 <li><a href={% url 'logout' %}>Logout</a>
                 {% else %}
                 <li>
@@ -50,13 +50,13 @@
                 {% endif %}
             </ul>
             <ul class='nav navbar-right'>
-                <li>Server time at page load: <b id='time'>{% now "jS F Y H:i"%}</b>&nbsp;</li>
                 <li> {% if contest_on %}
                     <a class='text-success'>Contest Online
                      {%else%}
                     <a class='text-danger'>Contest OffLine
                      {%endif%}
-                </a></li>
+                     <b id='time'>{% now "jS F Y H:i"%}</b>&nbsp;</a>
+                </li>
             </ul>
         </div><!-- Navbar collapse-->
         </nav>
