@@ -5,18 +5,25 @@
 {% endblock %}
 
 {%block body%}
-<div class='col-md-4 text-center'>
-{% if successful_registration %}
-    <b>{{successful_registration}}</b> was registered.<br>
+<h4 class='text-center'>This is the time {{contest_phase}} the contest</h4>
+{% if form %}
+    <div class='col-md-4'>
+    {% if successful_registration %}
+        <b>{{successful_registration}}</b> was registered.<br>
+    {% endif %}
+
+    {% if form.errors %}
+        <p class='bg-danger'>Dang! the username is taken. Try another one.</p>
+    {% endif %}
+
+        <form role='form' method="post" action="{% url 'register' %}" class='form text-center'>
+            {% csrf_token %}
+            {{ form | bootstrap }}
+            <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
+        </form>
+    <hr>
+    </div>
+{% else %}
+    <h2 class='text-center bg-warning'> Registrations are closed</h2>
 {% endif %}
-{% if form.errors %}
-    <p class='bg-danger'>Dang! the username is taken. Try another one.</p>
-{% endif %}
-    <form role='form' method="post" action="{% url 'register' %}" class='form'>
-        {% csrf_token %}
-        {{ form | bootstrap }}
-        <button class="btn btn-lg btn-success btn-block" type="submit">Register</button>
-    </form>
-<hr>
-</div>
 {%endblock%}

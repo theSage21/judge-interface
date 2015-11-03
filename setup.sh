@@ -54,8 +54,14 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'website.settings')
 import django
 django.setup()
 from question import models
-from contest.models import Slave
+from contest.models import Slave, ContestControl
 from django.core.files import File
+from datetime import timedelta
+
+print('Adding contest')
+contest = ContestControl()
+contest.end = contest.start + timedelta(0, 60 * 90)
+contest.save()
 
 print('Adding answer types')
 at = models.AnswerType()
