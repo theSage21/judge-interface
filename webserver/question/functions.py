@@ -1,7 +1,7 @@
 from socket import create_connection
 from contest.models import Slave
 from json import loads, dumps
-from question.models import Attempt
+from question.models import Attempt, AttemptForm
 
 
 def get_alive_slaves():
@@ -114,3 +114,14 @@ def update_marks(profile, attempt):
         if attempt.correct:
             profile.score += attempt.marks
             profile.save()
+
+
+def get_attempt_form(question, player):
+    "Get the attempt form prepopulated with last attempt"
+    # last attempt
+    attempts_on_this_question = Attempt.objects.filter(question=question)
+    last_attempts_list = attempts_on_this_question.filter(player=player)
+    last_attempt = last_attempts_list.order_by('-stamp').first()
+    # generate form
+    form =  AttemptForm(instance=last_attempt)
+    return form
