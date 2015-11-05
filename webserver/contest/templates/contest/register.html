@@ -6,15 +6,17 @@
 
 {%block body%}
 {% if form %}
-    <div class='col-md-4'>
+    <div class='col-md-4 text-center'>
     {% if successful_registration %}
-        <b>{{successful_registration}}</b> was registered.<br>
+        <p class='bg-success'>
+        <b>{{successful_registration}}</b> was registered successfully. Please login to start.<br>
+        </p>
     {% endif %}
 
     {% if form.errors %}
-        <p class='bg-danger'>Dang! the username is taken. Try another one.</p>
+        <p class='bg-danger'>Dang! That username is taken. Try another one.</p>
     {% endif %}
-
+        <h2 class='form-heading'>Please Register</h2>
         <form role='form' method="post" action="{% url 'register' %}" class='form text-center'>
             {% csrf_token %}
             {{ form | bootstrap }}

@@ -7,12 +7,13 @@
 {% endblock %}
 
 {%block body%}
-<div class='col-md-4 text-center'>
+<div class='container'>
+<div class='col-md-4'>
     {% if form.errors %}
         <p style="color: red;">Your username and password didn't match. Please try again.</p>
     {% endif %}
 
-    <form role='form' method="post" action="{% url 'django.contrib.auth.views.login' %}" class='form'>
+    <form role='form' method="post" action="{% url 'django.contrib.auth.views.login' %}" class='form text-center'>
         {% csrf_token %}
         <h2 class="form-heading">Please Login</h2>
         {{ form | bootstrap }}
@@ -20,5 +21,6 @@
         <input type="hidden" name="next" value="{{ next }}" />
     </form>
 <hr>
+</div>
 </div>
 {%endblock%}
