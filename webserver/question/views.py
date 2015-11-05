@@ -40,7 +40,12 @@ def question(request, qno):
                                                          player=request.user.profile).order_by('-stamp')
 
         if request.method == 'GET':
-            data['answer_form'] = models.AttemptForm()
+            # last attempt
+            attempts_on_this_question = models.Attempt.objects.filter(question=ques)
+            last_attempts_list = attempts_on_this_question.filter(player=request.user.profile)
+            last_attempt = last_attempts_list.order_by('-stamp')[0]
+            # generate form
+            data['answer_form'] = models.AttemptForm(instance=last_attempt)
 
         if request.method == 'POST':
             data['answer_form'] = models.AttemptForm(request.POST, request.FILES)
