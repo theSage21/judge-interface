@@ -38,6 +38,11 @@ def question(request, qno):
         data['marks'] = functions.get_marks(data['question'])
         data['attempts'] = models.Attempt.objects.filter(question=data['question'],
                                                          player=request.user.profile).order_by('-stamp')
+        if len(data['attempts']) > 0:
+            last_correct = data['attempts'][0].correct
+        else:
+            last_correct = False
+        data['last_correct'] = last_correct
 
         if request.method == 'GET':
             data['answer_form'] = functions.get_attempt_form(ques, request.user.profile)

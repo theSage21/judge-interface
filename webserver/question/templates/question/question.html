@@ -29,6 +29,23 @@
                 {% endfor %}
             </ol>
         {% elif question %}{# if it is an individual question #}
+        {% if last_correct %}{# correct answer recieved #}
+            <div class="alert alert-success alert-dismissible" role="alert">
+                Correct Answer. Further attempts on this question will be ignored.
+                {% else %}{# something went wrong #}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                If you are seeing this one of the following is true:
+                <ul>
+                    <li>This is your first time on this question. If so <strong>ignore this message</strong></li>
+                    <li>Your last attempt was wrong(See Attempt History Tab)</li>
+                    <li>Your last attempt had errors(See Attempt History Tab)</li>
+                </ul>
+        {% endif %}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {# TABS for QUESTION #}
             <ul class="nav nav-tabs">
                 <li role="presentation" class="active"><a data-toggle="tab" href="#question_attempt">Question</a></li>
                 <li role="presentation"><a data-toggle="tab" href="#attempt_history">Attempt History</a></li>
