@@ -3,6 +3,11 @@ Judge-Interface
 
 This is the default interface for [openjudge](https://github.com/theSage21/openjudge).
 
+Some of it's features are:
+
+- Multi slave support
+- Ace code editor <https://ace.c9.io/#nav=about>
+- Runs on Gunicorn, Nginx
 
 Setup
 -----
