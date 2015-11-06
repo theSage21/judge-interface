@@ -15,9 +15,9 @@ def register(request):
     context = {}
     template = 'contest/register.html'
     context['contest_phase'] = contest_phase()
+    context['contest_on'] = is_contest_on()
     if contest_phase() != 'after':
         context['form'] = RegistrationForm()
-        context['contest_on'] = is_contest_on()
         if request.method == 'POST':
             form = RegistrationForm(request.POST)
             if form.is_valid():
@@ -34,4 +34,5 @@ def register(request):
 
 
 def unauthorized(request):
+    context['contest_on'] = is_contest_on()
     return render(request, 'unauthorized.html')

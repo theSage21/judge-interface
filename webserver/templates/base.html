@@ -45,7 +45,7 @@
                 <li><a> {{user.profile}} - {{user.profile.score}}</a> </li>
                 <li><a href={% url 'logout' %}>Logout</a>
                 {% else %}
-                <li><a> Unregistered User- 0.0</a></li>
+                <li><a> Unregistered User</a></li>
                 <li> <a href={% url "login"%}>Login</a>
                 {% endif %}
             </ul>

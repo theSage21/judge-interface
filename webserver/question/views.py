@@ -83,6 +83,7 @@ def attempt(request, att):
     # -----
     attempt = get_object_or_404(models.Attempt, pk=att)
     data['attempt'] = attempt
+    data['contest_on'] = is_contest_on()
     return render(request, template, data)
 
 
