@@ -6,3 +6,5 @@ cp $class_file ./
 output_file=${class_file##*/}
 output_call_name=${output_file%.class}
 java $output_call_name < $1
+rm $output_call_name
+rm temp_output
