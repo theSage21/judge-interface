@@ -22,7 +22,9 @@ class Language(models.Model):
     name = models.CharField(max_length=100)
     details = models.TextField()
     wrapper = models.FileField(upload_to='wrappers')
-    overwrite = models.BooleanField(default=False, help_text='overwrite required for storing the source code')
+    overwrite = models.BooleanField(default=False,
+                                    help_text='overwrite required\
+                                    for storing the source code')
 
 
 class Attempt(models.Model):
@@ -33,7 +35,9 @@ class Attempt(models.Model):
     question = models.ForeignKey('Question', related_name='question')
     language = models.ForeignKey('Language', related_name='language')
     source = models.TextField(null=True)
-    source_name = models.CharField(max_length=30, help_text='Name of source code file', null=True)
+    source_name = models.CharField(max_length=30,
+                                   help_text='Name of source code file',
+                                   null=True)
     correct = models.NullBooleanField(default=None)
     stamp = models.DateTimeField(auto_now_add=True)
     marks = models.FloatField()
@@ -95,4 +99,5 @@ class Answer(models.Model):
 class AttemptForm(ModelForm):
     class Meta:
         model = Attempt
-        exclude = ['player', 'question', 'stamp', 'correct', 'marks', 'remarks']
+        exclude = ['player', 'question', 'stamp',
+                   'correct', 'marks', 'remarks']

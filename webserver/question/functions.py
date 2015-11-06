@@ -2,9 +2,14 @@ from socket import create_connection
 from contest.models import Slave
 from json import loads, dumps
 from question.models import Attempt, AttemptForm
+from threading import Thread
+from queue import Queue
+
+result_Q = Queue()
 
 
 def get_alive_slaves():
+    "No of slaves alive"
     slaves = Slave.objects.all()
     alive = [s for s in slaves if s.is_alive()]
     return alive
@@ -33,7 +38,7 @@ def assign_job(data, jobs={}):
                 if not slave.busy:
                     jobs[pk] = slave
                     assigned = True
-        address = jobs[pk].get_address()
+    address = jobs[pk].get_address()
     return jobs[pk], address
 
 
@@ -73,7 +78,9 @@ def ask_check_server(data):
         value, remarks = False, resp
     elif resp == 'Error':
         value, remarks = False, remarks
-    return value, remarks
+    global result_Q
+    data = loads(data)
+    result_Q.put((data['pk'], value, remarks))
 
 
 def is_correct(attempt):
@@ -83,21 +90,36 @@ def is_correct(attempt):
         return attempt.correct
     else:
         data = attempt.get_json__()
-        result, comment = ask_check_server(data)
-        if result is not None:
-            attempt.correct = result
-            attempt.remarks = comment
-            attempt.marks = get_marks(attempt.question)
-            attempt.save()
-            return attempt.correct
+        t = Thread(target=ask_check_server, args=(data,))
+        t.start()
+        global result_Q
+        results = {}
+        while result_Q.qsize() > 0:
+            key, val, rem = result_Q.get()
+            results[key] = (val, rem)
+        pk = data['pk']
+        result, comment = None, "Checking..."
+        for key, value in results.items():
+            if key == pk:
+                result, comment = value
+            else:
+                result_Q.put((key, value[0], value[1]))
+
+        attempt.correct = result
+        attempt.remarks = comment
+        attempt.marks = get_marks(attempt.question)
+        attempt.save()
+        return attempt.correct
 
 
 def get_marks(question):
     """Get the current score for a question"""
     if question.practice:
         return 0
-    total_attempts = Attempt.objects.filter(question=question).exclude(correct=None).count()
-    wrong_attempts = Attempt.objects.filter(question=question, correct=False).count()
+    total_attempts = Attempt.objects.filter(
+        question=question).exclude(correct=None).count()
+    wrong_attempts = Attempt.objects.filter(
+        question=question, correct=False).count()
     if total_attempts == 0:
         score = 1.0
     else:
@@ -106,11 +128,10 @@ def get_marks(question):
 
 
 def update_marks(profile, attempt):
-    correct_attempts = Attempt.objects.filter(player=profile,
-                                              question=attempt.question
-                                              ).filter(correct=True,
-                                                       ).exclude(pk=attempt.pk).count()
-    if correct_attempts < 1:  # this has never been correctly attempted by player
+    correct_attempts = Attempt.objects.filter(
+        player=profile, question=attempt.question).filter(
+            correct=True,).exclude(pk=attempt.pk).count()
+    if correct_attempts < 1:  # this has never been correctly attempted
         if attempt.correct:
             profile.score += attempt.marks
             profile.save()
@@ -123,5 +144,5 @@ def get_attempt_form(question, player):
     last_attempts_list = attempts_on_this_question.filter(player=player)
     last_attempt = last_attempts_list.order_by('-stamp').first()
     # generate form
-    form =  AttemptForm(instance=last_attempt)
+    form = AttemptForm(instance=last_attempt)
     return form

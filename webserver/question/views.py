@@ -36,8 +36,12 @@ def question(request, qno):
     if is_contest_on() or ques.practice:
         data['question'] = ques
         data['marks'] = functions.get_marks(data['question'])
-        data['attempts'] = models.Attempt.objects.filter(question=data['question'],
-                                                         player=request.user.profile).order_by('-stamp')
+        data['attempts'] = models.Attempt.\
+            objects.filter(question=data['question'],
+                           player=request.user.profile).order_by('-stamp')
+        for att in data['attempts']:
+            if att.correct is None:
+                functions.is_correct(att)
         if len(data['attempts']) > 0:
             last_correct = data['attempts'][0].correct
         else:
@@ -45,9 +49,11 @@ def question(request, qno):
         data['last_correct'] = last_correct
 
         if request.method == 'GET':
-            data['answer_form'] = functions.get_attempt_form(ques, request.user.profile)
+            data['answer_form'] = functions.get_attempt_form(
+                ques, request.user.profile)
         if request.method == 'POST':
-            data['answer_form'] = models.AttemptForm(request.POST, request.FILES)
+            data['answer_form'] = models.AttemptForm(
+                request.POST, request.FILES)
             if data['answer_form'].is_valid():
                 form = data['answer_form']
                 attempt = form.save(commit=False)
