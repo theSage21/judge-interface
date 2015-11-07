@@ -55,6 +55,7 @@
                      {%else%}
                     <a class='text-danger'>Contest OffLine
                      {%endif%}
+                     {{contest_time | timeuntil}} Left<br>
                      <b id='time'>{% now "jS F Y H:i"%}</b>&nbsp;</a>
                 </li>
             </ul>

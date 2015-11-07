@@ -12,7 +12,6 @@ def leaderboard(request):
     template = 'question/leaderboard.html'
     data['players'] = models.Profile.objects.order_by('-score')
     data['questions'] = models.Question.objects.order_by('qno')
-    data['contest_on'] = is_contest_on()
     return render(request, template, data)
 
 
@@ -21,7 +20,6 @@ def question_home(request):
     data = {}
     template = 'question/question.html'
     data['questions'] = models.Question.objects.all()
-    data['contest_on'] = is_contest_on()
     return render(request, template, data)
 
 
@@ -31,7 +29,6 @@ def question(request, qno):
     qno = int(qno)
     data = {}
     template = 'question/question.html'
-    data['contest_on'] = is_contest_on()
     ques = get_object_or_404(models.Question, qno=qno)
     if is_contest_on() or ques.practice:
         data['question'] = ques
@@ -89,7 +86,6 @@ def attempt(request, att):
     # -----
     attempt = get_object_or_404(models.Attempt, pk=att)
     data['attempt'] = attempt
-    data['contest_on'] = is_contest_on()
     return render(request, template, data)
 
 

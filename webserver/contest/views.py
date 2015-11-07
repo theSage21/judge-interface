@@ -1,21 +1,18 @@
 from django.shortcuts import render
 from contest.forms import RegistrationForm
 from question.models import Profile
-from contest.functions import is_contest_on, contest_phase
+from contest.functions import contest_phase
 
 
 def home(request):
     data = {}
     template = 'contest/home.html'
-    data['contest_on'] = is_contest_on()
     return render(request, template, data)
 
 
 def register(request):
     context = {}
     template = 'contest/register.html'
-    context['contest_phase'] = contest_phase()
-    context['contest_on'] = is_contest_on()
     if contest_phase() != 'after':
         context['form'] = RegistrationForm()
         if request.method == 'POST':
@@ -34,5 +31,4 @@ def register(request):
 
 
 def unauthorized(request):
-    context['contest_on'] = is_contest_on()
     return render(request, 'unauthorized.html')
