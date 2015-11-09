@@ -45,6 +45,7 @@
         {# TABS for QUESTION #}
             <ul class="nav nav-tabs">
                 <li role="presentation" class="active"><a data-toggle="tab" href="#question_attempt">Question</a></li>
+                <li role="presentation"><a data-toggle="tab" href="#attempt_form">Code Editor</a></li>
                 <li role="presentation"><a data-toggle="tab" href="#attempt_history">Attempt History</a></li>
             </ul>
             <div class="tab-content">
@@ -53,6 +54,8 @@
                     <p class='bg-warning'>Marks on page load: {{marks}}</p>
                     <pre>{{question.text}}</pre>
                     <hr>
+                </div>
+                <div class='tab-pane fade' id='attempt_form'>
                     <form role='form' action={%url "question:question" question.qno %} method='post'>
                         {%csrf_token%}
                         {%load bootstrap%}
@@ -112,6 +115,6 @@
         }
         new_mode()
         source_name.change(new_mode)
-        editor.setFontSize(14);
+        editor.setFontSize(18);
     </script>
 {%endblock%}
