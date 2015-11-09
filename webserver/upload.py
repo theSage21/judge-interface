@@ -21,7 +21,7 @@ for ques in questions:
     try:
         q.title = read(ques, 'title')
         q.text = read(ques, 'text')
-        if (q == '1') or (q == '2'):
+        if (ques == '1') or (ques == '2'):
             q.practice = True
         q.save()
     except:
