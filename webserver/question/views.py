@@ -30,15 +30,12 @@ def question(request, qno):
     data = {}
     template = 'question/question.html'
     ques = get_object_or_404(models.Question, qno=qno)
-    if is_contest_on() or ques.practice:
+    if (is_contest_on() or ques.practice):
         data['question'] = ques
         data['marks'] = functions.get_marks(data['question'])
         data['attempts'] = models.Attempt.\
             objects.filter(question=data['question'],
                            player=request.user.profile).order_by('-stamp')
-        for att in data['attempts']:
-            if att.correct is None:
-                functions.is_correct(att)
         if len(data['attempts']) > 0:
             last_correct = data['attempts'][0].correct
         else:
@@ -49,18 +46,19 @@ def question(request, qno):
             data['answer_form'] = functions.get_attempt_form(
                 ques, request.user.profile)
         if request.method == 'POST':
-            data['answer_form'] = models.AttemptForm(
-                request.POST, request.FILES)
-            if data['answer_form'].is_valid():
-                form = data['answer_form']
-                attempt = form.save(commit=False)
-                attempt.player = request.user.profile
-                attempt.question = data['question']
-                attempt.marks = data['marks']
-                attempt.save()
-                if functions.is_correct(attempt):  # force a check request
-                    functions.update_marks(request.user.profile, attempt)
-                return redirect('question:question', qno=qno)
+            if not ques.has_been_answered(request.user):
+                data['answer_form'] = models.AttemptForm(
+                    request.POST, request.FILES)
+                if data['answer_form'].is_valid():
+                    form = data['answer_form']
+                    attempt = form.save(commit=False)
+                    attempt.player = request.user.profile
+                    attempt.question = data['question']
+                    attempt.marks = data['marks']
+                    attempt.save()
+                    if functions.is_correct(attempt):  # force a check request
+                        functions.update_marks(request.user.profile, attempt)
+                    return redirect('question:question', qno=qno)
 
     return render(request, template, data)
 
@@ -86,6 +84,7 @@ def attempt(request, att):
     # -----
     attempt = get_object_or_404(models.Attempt, pk=att)
     data['attempt'] = attempt
+    functions.is_correct(attempt)
     return render(request, template, data)
 
 

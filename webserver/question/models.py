@@ -10,8 +10,13 @@ class Profile(User):
     A user profile.
     Stores scores and other data
     """
-    score = models.FloatField(default=0.0)
     last_solved = models.DateTimeField(default=now)
+
+    def _get_score(self):
+        "Get the user's current score"
+        score = Attempt.objects.filter(player=self).filter(correct=True).aggregate(total_marks=Sum('marks'))
+        return score['total_marks']
+    score = property(_get_score)
 
 
 class Language(models.Model):
@@ -73,6 +78,11 @@ class Question(models.Model):
 
     def get_absolute_url(self):
         return reverse('question:question', kwargs={'qno': self.qno})
+
+    def has_been_answered(self, user):
+        attempts = Attempt.objects.filter(question=self, player=user.profile).values('correct')
+        return any([i['correct'] for i in attempts])
+
 
 
 class AnswerType(models.Model):

@@ -7,6 +7,20 @@
     height: 500px;
     }
 </style>
+<script>
+function check(pk){
+$.ajax({url: '/question/attempt/' + pk;,
+    success: function(result){
+        if('Checking...' in result){  {# TODO: the in operator is not working. Find out what is wrong #}
+            setTimeout(check(pk), 500);
+        }
+        else:
+        {
+            document.location.reload();
+        }
+    }});
+            }
+</script>
 {% endblock %}
 
 {%block body%}
@@ -94,6 +108,11 @@
     {% load staticfiles %}
     <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'ace/ext-modelist.js' %}" type="text/javascript" charset="utf-8"></script>
+    <script>
+        {% if attempts[0].remarks == 'Checking...' %}
+        check({{attempts[0].pk}});
+        {% endif %}
+    </script>
     <script>
         var editor = ace.edit("temp_text_area");
         var textarea = $('textarea[id="id_source"]');

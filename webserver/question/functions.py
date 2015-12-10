@@ -118,16 +118,19 @@ def get_marks(question):
         return 0
     total_attempts = Attempt.objects.filter(
         question=question).exclude(correct=None).count()
-    wrong_attempts = Attempt.objects.filter(
-        question=question, correct=False).count()
     if total_attempts == 0:
         score = 1.0
     else:
+        wrong_attempts = Attempt.objects.filter(
+            question=question, correct=False).count()
         score = float(wrong_attempts) / float(total_attempts)
     return score
 
 
 def update_marks(profile, attempt):
+    return  # NOTE: this is deprecated as we no longer
+    # allow attempts on questions which have been answered correctly
+    # once
     correct_attempts = Attempt.objects.filter(
         player=profile, question=attempt.question).filter(
             correct=True,).exclude(pk=attempt.pk).count()
