@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.forms import ModelForm
+from question import functions
 
 
 class Profile(User):
@@ -80,8 +81,10 @@ class Question(models.Model):
         return reverse('question:question', kwargs={'qno': self.qno})
 
     def has_been_answered(self, user):
-        attempts = Attempt.objects.filter(question=self, player=user.profile).values('correct')
-        return any([i['correct'] for i in attempts])
+        attempts = Attempt.objects.filter(question=self, player=user.profile)
+        for att in attempts:
+            functions.is_correct(att)
+        return any([i.correct for i in attempts])
 
 
 
