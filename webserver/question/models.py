@@ -111,9 +111,16 @@ class Question(models.Model):
 
     def has_been_answered(self, user):
         attempts = Attempt.objects.filter(question=self, player=user.profile)
+        # assume that not attempted
+        answered = False
         for att in attempts:
-            functions.is_correct(att)
-        return any([i.correct for i in attempts])
+            res = att.is_correct()
+            # is any one of them pending checks?
+            if ((res is None) or
+                (res is True)):
+                    answered = True
+                    break
+        return answered
 
 
     def get_marks(self):

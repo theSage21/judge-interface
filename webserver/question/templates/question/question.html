@@ -11,7 +11,7 @@
 function check(pk){
 $.ajax({url: '/question/attempt/' + pk;,
     success: function(result){
-        if('Checking...' in result){  {# TODO: the in operator is not working. Find out what is wrong #}
+        if(result.indexOf('Checking...') != -1){
             setTimeout(check(pk), 500);
         }
         else:

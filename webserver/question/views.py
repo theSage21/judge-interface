@@ -44,11 +44,12 @@ def question(request, qno):
             last_correct = False
         data['last_correct'] = last_correct
 
-        if request.method == 'GET':
-            data['answer_form'] = functions.get_attempt_form(
-                ques, request.user.profile)
-        if request.method == 'POST':
-            if not ques.has_been_answered(request.user):
+        if not ques.has_been_answered(request.user):
+            # Only if the question is yet to be answered, say yes
+            if request.method == 'GET':
+                data['answer_form'] = functions.get_attempt_form(
+                    ques, request.user.profile)
+            if request.method == 'POST':
                 data['answer_form'] = models.AttemptForm(
                     request.POST, request.FILES)
                 if data['answer_form'].is_valid():
