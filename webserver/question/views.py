@@ -10,7 +10,9 @@ def leaderboard(request):
     """The scoreboard"""
     data = {}
     template = 'question/leaderboard.html'
-    data['players'] = models.Profile.objects.order_by('-score')
+    players = list(models.Profile.objects.all())
+    players.sort(key=lambda p:p.score, reverse=True)
+    data['players'] = players
     data['questions'] = models.Question.objects.order_by('qno')
     return render(request, template, data)
 
@@ -32,7 +34,7 @@ def question(request, qno):
     ques = get_object_or_404(models.Question, qno=qno)
     if (is_contest_on() or ques.practice):
         data['question'] = ques
-        data['marks'] = functions.get_marks(data['question'])
+        data['marks'] = data['question'].get_marks()
         data['attempts'] = models.Attempt.\
             objects.filter(question=data['question'],
                            player=request.user.profile).order_by('-stamp')
@@ -56,7 +58,7 @@ def question(request, qno):
                     attempt.question = data['question']
                     attempt.marks = data['marks']
                     attempt.save()
-                    if functions.is_correct(attempt):  # force a check request
+                    if attempt.is_correct():  # force a check request
                         functions.update_marks(request.user.profile, attempt)
                     return redirect('question:question', qno=qno)
 
@@ -84,7 +86,7 @@ def attempt(request, att):
     # -----
     attempt = get_object_or_404(models.Attempt, pk=att)
     data['attempt'] = attempt
-    functions.is_correct(attempt)
+    attempt.is_correct()
     return render(request, template, data)
 
 

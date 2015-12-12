@@ -109,11 +109,6 @@ $.ajax({url: '/question/attempt/' + pk;,
     <script src="{% static 'ace/ace.js' %}" type="text/javascript" charset="utf-8"></script>
     <script src="{% static 'ace/ext-modelist.js' %}" type="text/javascript" charset="utf-8"></script>
     <script>
-        {% if attempts[0].remarks == 'Checking...' %}
-        check({{attempts[0].pk}});
-        {% endif %}
-    </script>
-    <script>
         var editor = ace.edit("temp_text_area");
         var textarea = $('textarea[id="id_source"]');
         var label = $('label[for="id_source"]').hide(); textarea.hide();
@@ -136,4 +131,9 @@ $.ajax({url: '/question/attempt/' + pk;,
         source_name.change(new_mode)
         editor.setFontSize(18);
     </script>
+    {% for a in attempts %}
+        {% if a.remarks == 'Checking...' %}
+        <script> check({{a.pk}}); </script>
+        {% endif %}
+    {% endfor %}
 {%endblock%}

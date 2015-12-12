@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from django.forms import ModelForm
-from question import functions
 
 
 class Profile(User):
@@ -15,8 +14,11 @@ class Profile(User):
 
     def _get_score(self):
         "Get the user's current score"
-        score = Attempt.objects.filter(player=self).filter(correct=True).aggregate(total_marks=Sum('marks'))
-        return score['total_marks']
+        attempts = Attempt.objects.filter(player=self).filter(correct=True)
+        score = attempts.aggregate(models.Sum('marks'))
+        print(score, 'score')
+        marks = score['marks__sum']
+        return marks if marks is not None else 0
     score = property(_get_score)
 
 
@@ -65,6 +67,33 @@ class Attempt(models.Model):
                 }
         return data
 
+    def is_correct(self):
+        """Checks if the attempt was correct
+        By contacting the check server."""
+        if self.correct is not None:
+            return self.correct
+        else:
+            data = self.get_json__()
+            t = Thread(target=ask_check_server, args=(data,))
+            t.start()
+            global result_Q
+            results = {}
+            while result_Q.qsize() > 0:
+                key, val, rem = result_Q.get()
+                results[key] = (val, rem)
+            pk = data['pk']
+            result, comment = None, "Checking..."
+            for key, value in results.items():
+                if key == pk:
+                    result, comment = value
+                else:
+                    result_Q.put((key, value[0], value[1]))
+            self.correct = result
+            self.remarks = comment
+            self.marks = self.question.get_marks()
+            self.save()
+            return attempt.correct
+
 
 class Question(models.Model):
     """A question in the competition"""
@@ -87,6 +116,19 @@ class Question(models.Model):
         return any([i.correct for i in attempts])
 
 
+    def get_marks(self):
+        """Get the current score for a question"""
+        if self.practice:
+            return 0
+        total_attempts = Attempt.objects.filter(
+            question=self).exclude(correct=None).count()
+        if total_attempts == 0:
+            score = 1.0
+        else:
+            wrong_attempts = Attempt.objects.filter(
+                question=self, correct=False).count()
+            score = float(wrong_attempts) / float(total_attempts)
+        return score
 
 class AnswerType(models.Model):
     """Used to determine which type of checking to use.

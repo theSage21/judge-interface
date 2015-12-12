@@ -1,7 +1,7 @@
 from socket import create_connection
 from contest.models import Slave
 from json import loads, dumps
-from question.models import Attempt, AttemptForm
+from question.models import Attempt, AttemptForm 
 from threading import Thread
 from queue import Queue
 
@@ -81,50 +81,6 @@ def ask_check_server(data):
     global result_Q
     data = loads(data)
     result_Q.put((data['pk'], value, remarks))
-
-
-def is_correct(attempt):
-    """Checks if the attempt was correct
-    By contacting the check server."""
-    if attempt.correct is not None:
-        return attempt.correct
-    else:
-        data = attempt.get_json__()
-        t = Thread(target=ask_check_server, args=(data,))
-        t.start()
-        global result_Q
-        results = {}
-        while result_Q.qsize() > 0:
-            key, val, rem = result_Q.get()
-            results[key] = (val, rem)
-        pk = data['pk']
-        result, comment = None, "Checking..."
-        for key, value in results.items():
-            if key == pk:
-                result, comment = value
-            else:
-                result_Q.put((key, value[0], value[1]))
-
-        attempt.correct = result
-        attempt.remarks = comment
-        attempt.marks = get_marks(attempt.question)
-        attempt.save()
-        return attempt.correct
-
-
-def get_marks(question):
-    """Get the current score for a question"""
-    if question.practice:
-        return 0
-    total_attempts = Attempt.objects.filter(
-        question=question).exclude(correct=None).count()
-    if total_attempts == 0:
-        score = 1.0
-    else:
-        wrong_attempts = Attempt.objects.filter(
-            question=question, correct=False).count()
-        score = float(wrong_attempts) / float(total_attempts)
-    return score
 
 
 def update_marks(profile, attempt):
