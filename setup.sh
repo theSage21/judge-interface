@@ -121,10 +121,7 @@ rm -rf calibration
 
 echo -e "$RED Installing Nginx $NC"
 
-sudo apt-get install nginx
-sudo service nginx start
-
-echo "
+sudo apt-get install nginx  && sudo service nginx start && echo "
 upstream app_server_djangoapp {
     server 127.0.0.1:8000 fail_timeout=0;
 }
@@ -136,8 +133,7 @@ server {
     # path for static files
     root $setup_folder/webserver/static_files/;
     location /static {
-            alias $setup_folder/webserver/static_files/;" > $setup_folder/judge.conf
-echo '
+            alias $setup_folder/webserver/static_files/;" > $setup_folder/judge.conf  && echo '
             access_log   off;
             expires      max;
              }
@@ -150,13 +146,7 @@ echo '
             break;
         }
     }
-}' >> $setup_folder/judge.conf
-sudo mv $setup_folder/judge.conf /etc/nginx/sites-available/openjudge
-
-cd /etc/nginx/sites-enabled/
-sudo rm /etc/nginx/sites-enabled/openjudge
-sudo ln /etc/nginx/sites-available/openjudge
-sudo service nginx reload
+}' >> $setup_folder/judge.conf && sudo mv $setup_folder/judge.conf /etc/nginx/sites-available/openjudge && cd /etc/nginx/sites-enabled/ && sudo rm /etc/nginx/sites-enabled/openjudge && sudo ln /etc/nginx/sites-available/openjudge && sudo service nginx reload
 
 echo -e "$PWD Completed Nginx setup $NC"
 

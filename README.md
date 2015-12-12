@@ -46,8 +46,8 @@ Question View
 ![Question View](screenshots/question.png)
 Question List
 ![Question List](screenshots/question_list.png)
-Leaderboard
-![Leaderboard](screenshots/leaderboard.png)
+Ace Editor
+![Code Editor](screenshots/question_attempt.png)
 
 
 TroubleShooting
