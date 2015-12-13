@@ -14,7 +14,7 @@ $.ajax({url: '/question/attempt/' + pk;,
         if(result.indexOf('Checking...') != -1){
             setTimeout(check(pk), 500);
         }
-        else:
+        else
         {
             document.location.reload();
         }
@@ -69,6 +69,7 @@ $.ajax({url: '/question/attempt/' + pk;,
                     <pre>{{question.text}}</pre>
                     <hr>
                 </div>
+                {% if answer_form %}
                 <div class='tab-pane fade' id='attempt_form'>
                     <form role='form' action={%url "question:question" question.qno %} method='post'>
                         {%csrf_token%}
@@ -81,6 +82,7 @@ $.ajax({url: '/question/attempt/' + pk;,
                         <input type='submit' class='btn btn-success' value='Submit'></input>
                     </form>
                 </div>
+                {% endif %}
                 <div class="tab-pane fade" id="attempt_history">
                     <div class='table-responsive'>
                         <table class='table table-hover'>
