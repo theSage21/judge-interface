@@ -1,8 +1,9 @@
 Judge-Interface
 ===============
 
-*Note* This project has been merged in to the [openjudge](https://github.com/theSage21/openjudge) project.
-This is the default interface for [openjudge](https://github.com/theSage21/openjudge).
+**Note** This project has been merged in to the [openjudge](https://github.com/theSage21/openjudge) project.
+
+~~This is the default interface for [openjudge](https://github.com/theSage21/openjudge).~~
 
 Some of it's features are:
 
